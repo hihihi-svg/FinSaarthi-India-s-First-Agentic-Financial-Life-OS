@@ -1,0 +1,16 @@
+langchain
+langgraph
+langchain-google-genai
+chromadb
+sentence-transformers
+pdfplumber
+pypdf2
+numpy-financial
+pandas
+numpy
+plotly
+streamlit
+fastapi
+uvicorn
+python-dotenv
+pytest
