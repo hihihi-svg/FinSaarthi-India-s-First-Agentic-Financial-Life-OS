@@ -35,17 +35,28 @@ def calculate_old_regime(gross_salary, deductions_80c, hra, nps, medical):
     return tax * 1.04 # Health & Education Cess
 
 def calculate_new_regime(gross_salary):
-    """Simplified 2024-25 New Tax Regime calculation"""
-    taxable = gross_salary - 75000 # Standard Deduction (Revised 2024)
-    if taxable <= 700000: return 0 # Rebate u/s 87A
-    # Slab logic... (Simplified)
+    """2025-26 New Tax Regime (Budget 2025) calculation"""
+    standard_deduction = 75000
+    taxable = gross_salary - standard_deduction
+    
+    if taxable <= 1200000: return 0 # Rebate u/s 87A up to 12L
+    
     tax = 0
-    if taxable > 1500000: tax += (taxable - 1500000) * 0.3 + 150000
-    elif taxable > 1200000: tax += (taxable - 1200000) * 0.2 + 90000
-    elif taxable > 900000: tax += (taxable - 900000) * 0.15 + 45000
-    elif taxable > 600000: tax += (taxable - 600000) * 0.1 + 15000
-    elif taxable > 300000: tax += (taxable - 300000) * 0.05
-    return tax * 1.04
+    # Slabs for FY 2025-26
+    if taxable > 2400000:
+        tax += (taxable - 2400000) * 0.3 + 300000 # (4*0.05 + 4*0.1 + 4*0.15 + 4*0.2 + 4*0.25)
+    elif taxable > 2000000:
+        tax += (taxable - 2000000) * 0.25 + 200000
+    elif taxable > 1600000:
+        tax += (taxable - 1600000) * 0.2 + 120000
+    elif taxable > 1200000:
+        tax += (taxable - 1200000) * 0.15 + 60000
+    elif taxable > 800000:
+        tax += (taxable - 800000) * 0.1 + 20000
+    elif taxable > 400000:
+        tax += (taxable - 400000) * 0.05
+        
+    return tax * 1.04 # 4% Cess
 
 def compare_tax_regimes(gross_salary, deductions_80c, hra, nps, medical):
     """Compare old vs new tax regime and return savings"""

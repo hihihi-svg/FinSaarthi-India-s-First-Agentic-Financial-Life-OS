@@ -14,10 +14,33 @@ import {
   X
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { queryAgent } from './api/client';
 
 const App = () => {
   const [activeTab, setActiveTab] = useState('home');
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [apiResult, setApiResult] = useState(null);
+
+  const handleQuery = async (queryType) => {
+    setLoading(true);
+    try {
+      const profile = {
+        gross_salary: 1500000,
+        deductions_80c: 150000,
+        hra: 50000,
+        nps: 50000,
+        medical: 25000,
+        name: "Investor"
+      };
+      const result = await queryAgent(`Tell me about ${queryType}`, profile);
+      setApiResult(result);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const features = [
     { 
@@ -150,7 +173,13 @@ const App = () => {
           </div>
           <div className="flex gap-4">
             <button className="bg-white/5 border border-white/10 px-4 py-2 text-sm">Feedback</button>
-            <button className="px-4 py-2 text-sm">Upload CAMS PDF</button>
+            <button 
+              onClick={() => handleQuery('tax')} 
+              disabled={loading}
+              className="px-4 py-2 text-sm"
+            >
+              {loading ? 'Analyzing...' : 'Run Tax Optimizer'}
+            </button>
           </div>
         </header>
 
@@ -170,9 +199,18 @@ const App = () => {
           <div className="glass-card min-h-[300px]">
             <h4 className="text-lg font-bold mb-4">Agent Logic Hub</h4>
             <div className="space-y-4">
-              <LogItem time="09:42" text="Portfolio Agent: Analyzing overlap..." />
-              <LogItem time="09:40" text="Tax Wizard: RAG lookup for 80C changes." color="pink" />
-              <LogItem time="09:38" text="Orchestrator: Routing to FIRE Planner." color="purple" />
+              {apiResult ? (
+                <div className="animate-fade-in p-4 bg-blue-600/10 rounded-xl border border-blue-500/20">
+                    <p className="text-blue-400 font-bold mb-2">Orchestrator Result:</p>
+                    <p className="text-sm leading-relaxed">{apiResult.final_response}</p>
+                </div>
+              ) : (
+                <>
+                  <LogItem time="09:42" text="Portfolio Agent: Ready for analysis." />
+                  <LogItem time="09:40" text="Tax Wizard: Awaiting input..." color="pink" />
+                  <LogItem time="09:38" text="Orchestrator: System online." color="purple" />
+                </>
+              )}
             </div>
           </div>
         </div>

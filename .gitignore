@@ -1,0 +1,22 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+.env
+
+# Node.js
+node_modules/
+dist/
+build/
+.next/
+.DS_Store
+
+# Project Specific
+finsaarthi/rag/chromadb/
+*.log
+blueprint_text.txt
+FinSaarthi_Hackathon_Blueprint.docx

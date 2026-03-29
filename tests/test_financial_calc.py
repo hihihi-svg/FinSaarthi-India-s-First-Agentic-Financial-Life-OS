@@ -11,12 +11,14 @@ def test_sip_calculation():
     assert sip > 0
 
 def test_tax_comparison():
-    # Salary 15L, Deductions 1.5L, HRA 50k, NPS 50k, Medical 25k
+    # Salary 15L (FY 2025-26)
+    # New Regime: Taxable = 15L - 75k = 14.25L
+    # Tax = 20k (4-8) + 40k (8-12) + 33.75k (12-14.25) = 93.75k
+    # Total with 4% Cess = 97.5k
     result = compare_tax_regimes(1500000, 150000, 50000, 50000, 25000)
-    print(f"Tax Comparison: {result}")
+    print(f"Tax Comparison (FY 2025-26): {result}")
     assert 'old' in result
-    assert 'new' in result
-    assert 'savings' in result
+    assert result['new'] == 97500.0
 
 if __name__ == "__main__":
     test_sip_calculation()
